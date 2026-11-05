@@ -88,36 +88,6 @@ export const experience: TimelineEntry[] = [
     ],
     tags: ["HTML", "CSS", "JavaScript", "PHP", "SEO"],
   },
-  {
-    date: "Jun 2018 — Mar 2025",
-    title: "Adjunct Private Tutor in English and Mathematics",
-    organization: "Legend One Education Center · Tseung Kwan O",
-    details: [
-      "Instructed 30+ primary and secondary school students through mathematical and lexical assignments, with support matched to different learning styles.",
-    ],
-    tags: ["Teaching", "Mathematics", "English"],
-  },
-  {
-    date: "Feb 2022 — May 2022",
-    title: "Mathematical Olympiad Assistant Coach",
-    organization: "Mathematical Corporation (HK) Limited · Wan Chai",
-    details: [
-      "Taught primary and secondary students, including HKUGA College and KTBWCS, each week with designated materials.",
-      "Worked with students in classrooms and online so they could practise and improve mathematical skills.",
-    ],
-    tags: ["Mathematics", "Coaching"],
-  },
-  {
-    date: "Jun 2020",
-    title: "Adjunct Private Tutor in Mathematics",
-    organization: "SO-IN Education Centre (Kowloon Bay)",
-    details: [
-      "Constructed lesson plans for weekly mathematics lessons.",
-      "Designed in-class activities and prepared incentives.",
-      "Kept a clear lesson atmosphere and set discipline for the class.",
-    ],
-    tags: ["Teaching", "Mathematics"],
-  },
 ];
 
 // ─── Certifications ──────────────────────────────────────────────────
