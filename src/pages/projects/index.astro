@@ -1,0 +1,218 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import GitHubIcon from '../../components/icons/GitHubIcon.astro';
+import { getCollection } from 'astro:content';
+import { social } from '../../content/profile';
+import { base } from '../../lib/base';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<MainLayout title="Projects" description="Selected projects by Terence Chan.">
+  <section class="section">
+    <div class="container">
+
+      {social.github && (
+        <div class="github-profile card reveal">
+          <div class="github-profile-inner">
+            <span class="github-icon"><GitHubIcon size={28} /></span>
+            <div>
+              <p class="github-heading">Find more on GitHub</p>
+              <p class="github-sub">Browse all my repositories and open-source contributions.</p>
+            </div>
+            <a href={social.github} target="_blank" rel="noopener" class="github-link">View Profile &rarr;</a>
+          </div>
+        </div>
+      )}
+
+      <h2 class="section-title" style={social.github ? "margin-top: var(--space-2xl);" : undefined}>Selected Projects</h2>
+
+      {projects.length === 0 && (
+        <div class="empty-state">
+          <p>No projects yet. Check back soon!</p>
+        </div>
+      )}
+
+      <div class="projects-grid">
+        {projects.map(project => (
+          <a href={`${base}projects/${project.id.replace(/\.mdx?$/, '')}`} class="project-card card">
+            {project.data.image && (
+              <div class="project-image">
+                <img src={project.data.image} alt={project.data.title} loading="lazy" />
+              </div>
+            )}
+            <div class="project-body">
+              <div class="project-meta">
+                <time datetime={project.data.date.toISOString()}>
+                  {project.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                </time>
+                {project.data.featured && <span class="featured-badge">Featured</span>}
+              </div>
+              <h2 class="project-title">{project.data.title}</h2>
+              <p class="project-desc">{project.data.description}</p>
+              <div class="project-tags">
+                {project.data.tags.map(tag => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .page-title {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .github-profile {
+    margin-bottom: var(--space-xl);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .github-profile-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .github-icon {
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+  }
+
+  .github-heading {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-text-heading);
+    margin: 0;
+  }
+
+  .github-sub {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .github-link {
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-3xl) 0;
+    color: var(--color-text-muted);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    padding: 0;
+    border-top: 2px solid transparent;
+    background-origin: border-box;
+  }
+
+  .project-card:hover {
+    border-color: var(--color-accent);
+    border-image: var(--gradient-accent) 1;
+    border-image-slice: 1;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+
+  .project-card:hover .project-image img {
+    transform: scale(1.03);
+  }
+
+  .project-body {
+    padding: var(--space-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-meta time {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .featured-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-amber);
+    background: var(--color-amber-bg);
+    padding: 0.0625rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .github-profile-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .github-link {
+      margin-left: 0;
+    }
+  }
+</style>

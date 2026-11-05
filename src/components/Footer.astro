@@ -1,0 +1,81 @@
+---
+import { social } from '../content/profile';
+const year = new Date().getFullYear();
+const footerLinks = [
+  social.email ? { href: social.email, label: 'Email', external: false } : undefined,
+  social.github ? { href: social.github, label: 'GitHub', external: true } : undefined,
+  social.linkedin ? { href: social.linkedin, label: 'LinkedIn', external: true } : undefined,
+].filter((link): link is { href: string; label: string; external: boolean } => link !== undefined);
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="footer-text">
+      &copy; {year} Terence Chan. Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> &amp; MDX.
+    </p>
+    {footerLinks.length > 0 && (
+      <div class="footer-links">
+        {footerLinks.map((link, index) => (
+          <>
+            {index > 0 && <span class="divider">·</span>}
+            <a href={link.href} aria-label={link.label} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}>{link.label}</a>
+          </>
+        ))}
+      </div>
+    )}
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid transparent;
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-3xl);
+    background:
+      linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+      linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.55), rgba(167, 139, 250, 0.45), transparent)
+        border-box;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .footer-text {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.875rem;
+  }
+
+  .footer-links a {
+    color: var(--color-text-muted);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-accent);
+  }
+
+  .divider {
+    color: var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

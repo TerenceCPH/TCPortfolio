@@ -1,0 +1,87 @@
+---
+import EmailIcon from './icons/EmailIcon.astro';
+import GitHubIcon from './icons/GitHubIcon.astro';
+import LinkedInIcon from './icons/LinkedInIcon.astro';
+import { social } from '../content/profile';
+
+interface SocialLink {
+  label: string;
+  href: string;
+  icon: 'email' | 'github' | 'linkedin';
+}
+
+interface Props {
+  links?: SocialLink[];
+}
+
+const defaultLinks = [
+  social.email ? { label: 'Email', href: social.email, icon: 'email' as const } : undefined,
+  social.github ? { label: 'GitHub', href: social.github, icon: 'github' as const } : undefined,
+  social.linkedin ? { label: 'LinkedIn', href: social.linkedin, icon: 'linkedin' as const } : undefined,
+].filter((link): link is SocialLink => link !== undefined);
+
+const { links = defaultLinks } = Astro.props;
+---
+
+{links.length > 0 && (
+<div class="social-links">
+  {links.map(link => (
+    <a href={link.href} class="social-link" target={link.icon === 'email' ? undefined : '_blank'} rel={link.icon === 'email' ? undefined : 'noopener'} aria-label={link.label}>
+      <span class="social-icon">
+        {link.icon === 'email' && <EmailIcon size={20} />}
+        {link.icon === 'github' && <GitHubIcon size={20} />}
+        {link.icon === 'linkedin' && <LinkedInIcon size={20} />}
+      </span>
+      <span class="social-label">{link.label}</span>
+    </a>
+  ))}
+</div>
+)}
+
+<style>
+  .social-links {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-muted);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: rgba(56, 189, 248, 0.08);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .social-link:nth-child(2):hover {
+    color: var(--color-text-heading);
+    border-color: var(--color-text-heading);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.08);
+  }
+
+  .social-link:nth-child(3):hover {
+    color: #0a66c2;
+    border-color: #0a66c2;
+    box-shadow: 0 0 16px rgba(10, 102, 194, 0.15);
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+  }
+</style>

@@ -1,0 +1,191 @@
+---
+import { base } from '../lib/base';
+
+const currentPath = Astro.url.pathname;
+const navLinks = [
+  { href: base, label: 'Home' },
+  { href: `${base}projects`, label: 'Projects' },
+  // Blogs stays out of the nav until there are more posts.
+];
+
+const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+
+function isActive(href: string) {
+  const path = normalize(currentPath);
+  const target = normalize(href);
+  if (target === normalize(base)) return path === normalize(base);
+  return path.startsWith(target);
+}
+---
+
+<nav class="nav">
+  <div class="nav-inner container">
+    <a href={base} class="nav-logo">
+      <span class="logo-bracket">&lt;</span>TC<span class="logo-bracket"> /&gt;</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="hamburger"></span>
+    </button>
+
+    <ul class="nav-links">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['nav-link', { active: isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 8, 20, 0.72);
+    backdrop-filter: blur(18px) saturate(1.2);
+    border-bottom: 1px solid transparent;
+    background-clip: padding-box;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 0 rgba(56, 189, 248, 0.18), 0 10px 40px rgba(2, 6, 23, 0.35);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    letter-spacing: -0.025em;
+    text-shadow: 0 0 18px rgba(56, 189, 248, 0.18);
+  }
+
+  .nav-logo:hover {
+    color: var(--color-accent);
+  }
+
+  .logo-bracket {
+    color: var(--color-accent);
+    animation: pulse-glow 3.2s ease-in-out infinite;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--space-xl);
+    padding: 0;
+  }
+
+  .nav-link {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -0.375rem;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-accent);
+    background-size: 200% 100%;
+    border-radius: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-normal);
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-accent);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
+    animation: shimmer-shift 3s linear infinite;
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-sm);
+  }
+
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    display: block;
+    width: 1.5rem;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 1px;
+    transition: transform var(--transition-normal);
+  }
+
+  .hamburger {
+    position: relative;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .hamburger::before { top: -6px; }
+  .hamburger::after { top: 6px; }
+
+  @media (max-width: 768px) {
+    .nav-toggle {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-lg);
+      gap: var(--space-md);
+    }
+
+    .nav-links.open {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle?.addEventListener('click', () => {
+    links?.classList.toggle('open');
+    const isOpen = links?.classList.contains('open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+</script>
