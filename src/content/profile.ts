@@ -58,8 +58,8 @@ export const experience: TimelineEntry[] = [
     organization: "Shui On Building Contractors Limited · Tai Kok Tsui",
     details: [
       "Architected a Python-based automation pipeline integrating SOAP APIs which significantly reduced configuration time of PLC controllers from 2 weeks to 2 minutes.",
-      "Conducted an internal cybersecurity audit through provisioning, modifying, and auditing user accounts, access levels, and permissions tables across centralized and distributed environments to enforce the principle of least privilege in Windows and Linux.",
-      "Directed end-to-end asset modernization and physical-to-virtual migration to sustain functionality of secure access management systems with zero operational downtime.",
+      "Developed automated cybersecurity audit and patch management across centralized and distributed Windows and Linux environments to programmatically manage the user access matrix and ensure due care and due diligence in critical infrastructure.",
+      "Directed the architecture of a scalable system-imaging framework for physical-to-virtual and virtual-to-physical migrations to streamline end-to-end modernization of secure access management systems.",
       "Collaborated with the test and commissioning team to standardize technical documentation with a Docusaurus pipeline secured by Cloudflare Zero Trust and managed via GitHub version control to ensure industry compliance and alignment with real-time code deployments.",
     ],
     tags: ["Python", "SOAP", "Cybersecurity", "Virtualization"],
